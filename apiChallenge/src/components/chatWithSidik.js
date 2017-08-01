@@ -14,36 +14,54 @@ class chatWithSidik extends React.Component {
   constructor() {
     super()
     this.state = {
-      currUser: "",
-      chatLog: []
+      currUser: "You",
+      chatLog: [],
+      boksKata: ""
     }
   }
   render() {
     return (
       <View style={styles.container}>
-        <View>
+        <View style={styles.container} >
           {this.state.chatLog.map( (x, idx) => {
             if (idx % 2 === 0) {
               return (
-                <Text>{this.currUser}: {x}</Text>
+                <Text key={idx}>You : {x}</Text>
               )
             } else {
               return (
-                <Text>Sidik: {x}</Text>
+                <Text key={idx}>Sidik : {x}</Text>
               )
             }
           })}
         </View>
-        <TextInput style={{width: "80%"}} onChange={(e) => console.log(e.target.value())}/>
+        <View style={styles.containerDua} >
+        <TextInput style={{width: "80%"}} onChangeText={(e) => {this.textBox(e)}} defaultValue={this.state.boksKata}/>
         <Button
-          onPress={() => alert("Go!")}
+          onPress={() => this.sendChat()}
           title="Send"
           color="#841584"
           accessibilityLabel="Learn more about this purple button"
           style={{width: "20%"}}
         />
+        </View>
       </View>
     )
+  }
+
+  textBox(str) {
+    this.setState({
+      boksKata: str
+    })
+  }
+
+  sendChat() {
+    this.setState({
+      chatLog: [...this.state.chatLog, this.state.boksKata]
+    })
+    this.setState({
+      boksKata: ""
+    })
   }
 }
 
@@ -52,8 +70,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#afffbb'
+  },
+  containerDua: {
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#afffbb',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    width: '80%'
   }
 })
 
