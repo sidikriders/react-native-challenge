@@ -59,9 +59,27 @@ class chatWithSidik extends React.Component {
     this.setState({
       chatLog: [...this.state.chatLog, this.state.boksKata]
     })
-    this.setState({
-      boksKata: ""
-    })
+    // this.setState({
+    //   boksKata: ""
+    // })
+    this.getRespone()
+  }
+
+  getRespone() {
+    let self = this
+    return fetch('http://sandbox.api.simsimi.com/request.p?key=65a8d0ee-c166-4c8d-bdd0-f9dc14d9a9c8&lc=en&ft=1.0&text='+this.state.boksKata)
+    .then((response) => response.json())
+      .then((responseJson) => {
+        self.setState({
+          chatLog: [...self.state.chatLog, responseJson.response]
+        })
+        self.setState({
+          boksKata: ""
+        })
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 }
 
