@@ -4,7 +4,8 @@ import {
   Text,
   TextInput,
   Button,
-  View
+  View,
+  ScrollView
 } from 'react-native';
 
 class chatWithSidik extends React.Component {
@@ -16,34 +17,32 @@ class chatWithSidik extends React.Component {
     this.state = {
       currUser: "You",
       chatLog: [],
-      boksKata: ""
+      boksKata: "",
+      isLoading: false
     }
   }
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.container} >
-          {this.state.chatLog.map( (x, idx) => {
-            if (idx % 2 === 0) {
+      <View style={styles.containerSatu}>
+        <View style={styles.container}>
+          <ScrollView contentContainerStyle={styles.scrollViewStyle}>
+            {this.state.chatLog.map( (x, idx) => {
               return (
-                <Text key={idx}>You : {x}</Text>
+                <Text key={idx}>{x}</Text>
               )
-            } else {
-              return (
-                <Text key={idx}>Sidik : {x}</Text>
-              )
-            }
-          })}
+            })}
+          </ScrollView>
+          { this.state.isLoading ? <Text style={{fontSize: 20, fontWeight: 'bold', fontStyle: 'italic'}}>Sidik is typing</Text> : <Text></Text>}
         </View>
         <View style={styles.containerDua} >
-        <TextInput style={{width: "80%"}} onChangeText={(e) => {this.textBox(e)}} defaultValue={this.state.boksKata}/>
-        <Button
-          onPress={() => this.sendChat()}
-          title="Send"
-          color="#841584"
-          accessibilityLabel="Learn more about this purple button"
-          style={{width: "20%"}}
-        />
+          <TextInput style={{width: "80%"}} onChangeText={(e) => {this.textBox(e)}} defaultValue={this.state.boksKata}/>
+          <Button
+            onPress={() => this.sendChat()}
+            title="Send"
+            color="#841584"
+            accessibilityLabel="Learn more about this purple button"
+            style={{width: "30%"}}
+          />
         </View>
       </View>
     )
@@ -57,11 +56,9 @@ class chatWithSidik extends React.Component {
 
   sendChat() {
     this.setState({
-      chatLog: [...this.state.chatLog, this.state.boksKata]
+      chatLog: [...this.state.chatLog, 'You: ' + this.state.boksKata],
+      isLoading: true
     })
-    // this.setState({
-    //   boksKata: ""
-    // })
     this.getRespone()
   }
 
@@ -71,10 +68,11 @@ class chatWithSidik extends React.Component {
     .then((response) => response.json())
       .then((responseJson) => {
         self.setState({
-          chatLog: [...self.state.chatLog, responseJson.response]
+          chatLog: [...self.state.chatLog, 'Sidik: ' + responseJson.response]
         })
         self.setState({
-          boksKata: ""
+          boksKata: "",
+          isLoading: false
         })
       })
       .catch((error) => {
@@ -84,18 +82,35 @@ class chatWithSidik extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  containerSatu: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#afffbb'
+  },
+  container: {
+    flex: 1,
+    // justifyContent: 'flex-start',
+    // alignItems: 'flex-start',
+    backgroundColor: '#fff',
+    borderColor: '#000',
+    borderWidth: 1,
+    width: '90%',
+    marginTop: 20,
+    overflow: 'scroll'
   },
   containerDua: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#afffbb',
     flexDirection: 'row',
-    width: '80%'
+    width: '100%'
+  },
+  scrollViewStyle: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    paddingVertical: 20,
+    flexDirection: "column"
   }
 })
 
