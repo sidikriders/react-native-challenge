@@ -1,12 +1,20 @@
-import { TabNavigator } from 'react-navigation';
+import React from 'react';
 import { AppRegistry } from 'react-native'
+import { Provider } from 'react-redux'
 
+import store from './store'
 import AdorableAvatar from './components/AdorableAvatar'
 import chatWithSidik from './components/chatWithSidik'
+import Navigation from './Navigation'
 
-const apiChallenge = TabNavigator({
-  Chat: { screen: chatWithSidik },
-  Home: { screen: AdorableAvatar },
-});
+class apiChallenge extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+          <Navigation />
+      </Provider>
+    )
+  }
+}
 
 AppRegistry.registerComponent('apiChallenge', () => apiChallenge);

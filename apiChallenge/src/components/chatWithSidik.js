@@ -2,26 +2,37 @@ import React from 'react';
 import {
   StyleSheet,
   Text,
-  TextInput,
-  Button,
   View,
-  ScrollView
+  ScrollView,
+  Dimensions
 } from 'react-native';
+import {
+  Button,
+  FormLabel,
+  FormInput
+} from 'react-native-elements'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
-class chatWithSidik extends React.Component {
+class ChatWithSidik extends React.Component {
   static navigationOptions = {
-    title: 'Chat with Sidik'
+    drawerLabel: "CHAT WITH SIDIK",
+    drawerIcon: ({ tintColor }) => {
+      return (
+        <MaterialIcons name="question-answer" size={24} style={{color: tintColor}}></MaterialIcons>
+      )
+    }
   }
   constructor() {
     super()
     this.state = {
-      currUser: "You",
       chatLog: [],
       boksKata: "",
-      isLoading: false
+      isLoading: false,
+      dimensions: Dimensions.get('window')
     }
   }
   render() {
+    console.log('this.state.dimensions',this.state.dimensions);
     return (
       <View style={styles.containerSatu}>
         <View style={styles.container}>
@@ -35,13 +46,17 @@ class chatWithSidik extends React.Component {
           { this.state.isLoading ? <Text style={{fontSize: 20, fontWeight: 'bold', fontStyle: 'italic'}}>Sidik is typing</Text> : <Text></Text>}
         </View>
         <View style={styles.containerDua} >
-          <TextInput style={{width: "80%"}} onChangeText={(e) => {this.textBox(e)}} defaultValue={this.state.boksKata}/>
+          <FormInput
+            containerStyle={{flex: 1, width: this.state.dimensions.width*2}}
+            onChangeText={(e) => {this.textBox(e)}} defaultValue={this.state.boksKata} placeholder="Type your chat here.."/>
           <Button
             onPress={() => this.sendChat()}
             title="Send"
-            color="#841584"
+            icon={{name: "send"}}
+            iconRight
+            backgroundColor="#841584"
             accessibilityLabel="Learn more about this purple button"
-            style={{width: "30%"}}
+            style={{flex: 1}}
           />
         </View>
       </View>
@@ -95,6 +110,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderColor: '#000',
     borderWidth: 1,
+    borderRadius: 10,
     width: '90%',
     marginTop: 20,
     overflow: 'scroll'
@@ -102,9 +118,8 @@ const styles = StyleSheet.create({
   containerDua: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#afffbb',
-    flexDirection: 'row',
-    width: '100%'
+    // alignContent: 'center',
+    flexDirection: 'row'
   },
   scrollViewStyle: {
     justifyContent: 'flex-end',
@@ -114,4 +129,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default chatWithSidik
+export default ChatWithSidik
