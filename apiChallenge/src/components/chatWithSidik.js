@@ -12,6 +12,7 @@ import {
   FormInput
 } from 'react-native-elements'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 class ChatWithSidik extends React.Component {
   static navigationOptions = {
@@ -35,6 +36,10 @@ class ChatWithSidik extends React.Component {
     console.log('this.state.dimensions',this.state.dimensions);
     return (
       <View style={styles.containerSatu}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', width: '90%', backgroundColor: 'white', alignItems: 'center', padding: 10, marginTop: 10}}>
+          <FontAwesome name="bars"  style={{marginRight: 30, marginLeft: 10}} size={24} onPress={() => this.props.navigation.navigate('DrawerOpen')}></FontAwesome>
+          <Text style={{fontSize: 20}}>CHAT WITH SIDIK</Text>
+        </View>
         <View style={styles.container}>
           <ScrollView contentContainerStyle={styles.scrollViewStyle}>
             {this.state.chatLog.map( (x, idx) => {
@@ -45,9 +50,13 @@ class ChatWithSidik extends React.Component {
           </ScrollView>
           { this.state.isLoading ? <Text style={{fontSize: 20, fontWeight: 'bold', fontStyle: 'italic'}}>Sidik is typing</Text> : <Text></Text>}
         </View>
-        <View style={styles.containerDua} >
+        <View style={{
+          justifyContent: 'center',
+          marginTop: 20,
+          flexDirection: 'row'
+        }} >
           <FormInput
-            containerStyle={{flex: 1, width: this.state.dimensions.width*2}}
+            style={{width: this.state.dimensions.width*65/100}}
             onChangeText={(e) => {this.textBox(e)}} defaultValue={this.state.boksKata} placeholder="Type your chat here.."/>
           <Button
             onPress={() => this.sendChat()}
@@ -56,7 +65,7 @@ class ChatWithSidik extends React.Component {
             iconRight
             backgroundColor="#841584"
             accessibilityLabel="Learn more about this purple button"
-            style={{flex: 1}}
+            style={{}}
           />
         </View>
       </View>
@@ -74,25 +83,25 @@ class ChatWithSidik extends React.Component {
       chatLog: [...this.state.chatLog, 'You: ' + this.state.boksKata],
       isLoading: true
     })
-    this.getRespone()
+    this.getRespone(this.state.boksKata)
+    this.setState({
+      boksKata: ""
+    })
   }
 
-  getRespone() {
+  getRespone(str) {
     let self = this
-    return fetch('http://sandbox.api.simsimi.com/request.p?key=65a8d0ee-c166-4c8d-bdd0-f9dc14d9a9c8&lc=en&ft=1.0&text='+this.state.boksKata)
+    return fetch('http://sandbox.api.simsimi.com/request.p?key=65a8d0ee-c166-4c8d-bdd0-f9dc14d9a9c8&lc=id&ft=1.0&text='+str)
     .then((response) => response.json())
       .then((responseJson) => {
         self.setState({
-          chatLog: [...self.state.chatLog, 'Sidik: ' + responseJson.response]
-        })
-        self.setState({
-          boksKata: "",
+          chatLog: [...self.state.chatLog, 'Sidik: ' + responseJson.response],
           isLoading: false
         })
       })
       .catch((error) => {
         console.error(error);
-      });
+      })
   }
 }
 
@@ -118,7 +127,6 @@ const styles = StyleSheet.create({
   containerDua: {
     justifyContent: 'center',
     alignItems: 'center',
-    // alignContent: 'center',
     flexDirection: 'row'
   },
   scrollViewStyle: {

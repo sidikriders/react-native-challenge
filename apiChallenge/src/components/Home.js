@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { View, Text } from 'react-native'
-import { Button, Icon } from 'react-native-elements'
+import { Button, Icon, Card } from 'react-native-elements'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 
 class Home extends React.Component {
@@ -23,16 +24,20 @@ class Home extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <View style={
         {
           flex: 1,
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           alignItems: 'center',
+          backgroundColor: '#d0dbb8'
         }
       }>
-        <Text>Home</Text>
-        <MaterialIcons name="line-weight" size={24} onPress={() => this.props.navigation.navigate('DrawerOpen')}/>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', width: '90%', backgroundColor: 'white', alignItems: 'center', padding: 10, marginTop: 10}}>
+          <FontAwesome name="bars"  style={{marginRight: 30, marginLeft: 10}} size={24} onPress={() => this.props.navigation.navigate('DrawerOpen')}></FontAwesome>
+          <Text style={{fontSize: 20}}>HOME</Text>
+        </View>
       </View>
     )
   }
